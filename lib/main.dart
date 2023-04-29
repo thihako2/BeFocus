@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:avatar_glow/avatar_glow.dart';
+import 'package:befocus/Screens/GrammarScreens/GrammarCheckScreen.dart';
 import 'package:befocus/Screens/PronunciationScreen/PronunciationCheckScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
@@ -33,10 +34,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const PronunciationCheck(),
+      home: const GrammarCheck(),
     );
   }
 }

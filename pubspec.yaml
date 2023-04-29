@@ -45,6 +45,7 @@ dependencies:
   http: ^0.13.3
   text_analysis: ^1.0.0+2
   gmconsult_dev: ^0.0.7+5
+  flutter_quill: ^7.1.13
 
 dev_dependencies:
   flutter_test:

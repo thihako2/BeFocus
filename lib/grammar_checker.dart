@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:gmconsult_dev/gmconsult_dev.dart';
 import 'package:http/http.dart' as http;
+import 'package:text_analysis/text_analysis.dart';
 
 class GrammarChecker extends StatefulWidget {
   const GrammarChecker({super.key});
@@ -22,6 +24,7 @@ class _GrammarCheckerState extends State<GrammarChecker> {
   static const String apiVersion = "2.0";
   static const String lang = "US";
 
+  static const exampleText = ['The quick brown fox jumps over the lazy dog'];
   Future<Map<String, dynamic>> parse(String text) async {
     var params = {
       "lang": lang,
@@ -69,5 +72,46 @@ class _GrammarCheckerState extends State<GrammarChecker> {
       'result': result,
       'corrections': corrections,
     };
+  }
+
+  String changeChar(String originalText, int fromPosition, int toPosition,
+      String changeWith) {
+    return originalText.replaceRange(fromPosition, toPosition + 1, changeWith);
+  }
+
+  //no need but for more confortable
+  Future<List<Token>> _tokenizeParagraphs(Iterable<String> paragraphs) async {
+    //
+
+    // Initialize a StringBuffer to hold the source text
+    final sourceBuilder = StringBuffer();
+
+    // Concatenate the elements of [text] using line-endings
+    for (final src in exampleText) {
+      sourceBuilder.writeln(src);
+    }
+
+    // convert the StringBuffer to a String
+    final source = sourceBuilder.toString();
+
+    // tokenize the source
+    final tokens = await English.analyzer.tokenizer(source);
+
+    return tokens;
+  }
+
+  void _printTokens(String title, Iterable<Token> tokens) {
+    //
+
+    // map the tokens to a list of JSON documents
+    final results = tokens
+        .map(
+            (e) => {'term': e.term, 'zone': e.zone, 'position': e.termPosition})
+        .toList();
+
+    // print the results
+    Console.out(title: title, results: results);
+
+    //
   }
 }
