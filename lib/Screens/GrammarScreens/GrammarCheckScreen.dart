@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:language_tool/language_tool.dart';
 
 class GrammarCheck extends StatefulWidget {
   const GrammarCheck({super.key});
@@ -21,6 +22,8 @@ class _GrammarCheckState extends State<GrammarCheck> {
   static const String lang = "US";
   static const String path = "Ginger/correct/jsonSecured/GingerTheTextFull";
   String _result = "Result will be show here";
+
+  final tool = LanguageTool();
 
   List corrections = [];
   final sentencecontroller = TextEditingController();
@@ -58,9 +61,19 @@ class _GrammarCheckState extends State<GrammarCheck> {
             ),
             TextButton(
                 style: TextButton.styleFrom(backgroundColor: Colors.blueAccent),
-                onPressed: () {
+                onPressed: () async {
                   Future result = parse(sentencecontroller.text);
-                  print(result);
+                  final result2 = await tool.check(sentencecontroller.text);
+                  // result2.forEach(print);
+                  for (final mistake in result2) {
+                    print('''
+        Issue: ${mistake.message}
+        IssueType: ${mistake.issueDescription}
+        positioned at: ${mistake.offset}
+        with the lengh of ${mistake.length}.
+        Possible corrections: ${mistake.replacements}
+    ''');
+                  }
                 },
                 child: Text(
                   "Check Grammar",
